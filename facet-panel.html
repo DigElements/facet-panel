@@ -23,6 +23,7 @@ limitations under the License.
 <link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
 <link rel="import" href="../../bower_components/selected-facets-display/selected-facets-display.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="facet-panel-styles.html">
 
 <!--
 A Polymer Element containing a group of facet-lists and date-range-facets.
@@ -161,7 +162,7 @@ A Polymer Element containing a group of facet-lists and date-range-facets.
           }
         },
 
-        _toggleAllFacetLists: function () {
+        _toggleAllFacetLists: function() {
           var self = this;
           self.facetListsExpanded = !self.facetListsExpanded;
           // All facet lists should have the class 'facet'
@@ -172,11 +173,11 @@ A Polymer Element containing a group of facet-lists and date-range-facets.
           }
         },
 
-        _getToggleAllFacetsText: function () {
+        _getToggleAllFacetsText: function() {
           return (this.facetListsExpanded ? 'Collapse' : 'Expand') + ' All';
         },
 
-        _getToggleAllFacetsIcon: function () {
+        _getToggleAllFacetsIcon: function() {
           return (this.facetListsExpanded ? 'icons:expand-less' : 'icons:expand-more');
         },
 
@@ -185,7 +186,7 @@ A Polymer Element containing a group of facet-lists and date-range-facets.
           return DigBehaviors.FilterBehavior.areAllFacetsDisabled(this.searchParameters);
         },
 
-        _equals: function (a, b) {
+        _equals: function(a, b) {
           return a === b;
         }
       });
