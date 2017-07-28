@@ -46,8 +46,54 @@ limitations under the License.
       });
     });
 
-    test('', function() {
-        assert.equal();
+    test('_toggleAllFacetLists flips facetListsExpanded', function() {
+      element._toggleAllFacetLists();
+
+      assert.equal(element.facetListsExpanded, true);
+    });
+
+    test('_getToggleAllFacetsText returns correct text', function() {
+      element.facetListsExpanded = true;
+
+      assert.equal(element._getToggleAllFacetsText(), 'Collapse All');
+
+      element.facetListsExpanded = false;
+
+      assert.equal(element._getToggleAllFacetsText(), 'Expand All');
+    });
+
+    test('_getToggleAllFacetsIcon returns correct text', function() {
+      element.facetListsExpanded = true;
+
+      assert.equal(element._getToggleAllFacetsIcon(), 'icons:expand-less');
+
+      element.facetListsExpanded = false;
+
+      assert.equal(element._getToggleAllFacetsIcon(), 'icons:expand-more');
+    });
+
+    test('_noSearchParameters compares correctly', function() {
+      assert.equal(element._noSearchParameters(null), true);
+      assert.equal(element._noSearchParameters({}), true);
+
+      element.searchParameters = {
+        postingDate: {
+          dateEnd: {
+            enabled: true
+          },
+          dateStart: {
+            enabled: true
+          }
+        }
+      }
+
+      assert.equal(element._noSearchParameters(null), false);
+    });
+
+    test('_equals compares correctly', function() {
+      assert.equal(element._equals({},[]), false);
+      assert.equal(element._equals('abc',['abc']), false);
+      assert.equal(element._equals('abc','abc'), true);
     });
   });
 </script>
