@@ -128,35 +128,92 @@ A Polymer Element containing a group of facet-lists and date-range-facets.
         is: 'facet-panel',
 
         properties: {
+          /**
+          * (Required)
+          *
+          * The Domain the project points to.
+          *
+          * @type {String}
+          */
           domain: {
             type: String
           },
 
+          /**
+          * (Optional)
+          *
+          * Whether or not the facets are expanded.
+          *
+          * @type {Boolean}
+          * @default true
+          */
           facetListsExpanded: {
             type: Boolean,
             default: true
           },
 
+          /**
+          * (Required)
+          *
+          * The query used by the facets.
+          *
+          * @type {Object}
+          */
           facetsQuery: {
             type: Object
           },
 
+          /**
+          * (Required)
+          *
+          * The request object used by querys.
+          *
+          * @type {Object}
+          */
           processRequest: {
             type: Object
           },
 
+          /**
+          * (Required)
+          *
+          * The search endpoint used by querys.
+          *
+          * @type {Object}
+          */
           searchEndpoint: {
             type: Object
           },
 
+          /**
+          * (Required)
+          *
+          * The search fields used by the facets.
+          *
+          * @type {Object}
+          */
           searchFields: {
             type: Object
           },
 
+          /**
+          * (Required)
+          *
+          * The search parameters used by the facets.
+          *
+          * @type {Object}
+          */
           searchParameters: {
             type: Object
           },
 
+          /**
+          * (Required)
+          *
+          * The search keys used by the facets.
+          *
+          * @type {Object}
+          */
           searchKeys: {
             type: Object
           }
