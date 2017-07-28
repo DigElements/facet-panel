@@ -17,6 +17,7 @@ limitations under the License.
 <link rel="import" href="../../bower_components/date-range-facet/date-range-facet.html">
 <link rel="import" href="../../bower_components/facet-list/facet-list.html">
 <link rel="import" href="../../bower_components/filter-behavior/filter-behavior.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html">
 <link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
@@ -28,12 +29,13 @@ A Polymer Element containing a group of facet-lists and date-range-facets.
 ### Example
 ```html
 <facet-panel
-  facetsQuery="[[facetsQuery]]"
-  item="[[item]]"
-  processRequest="{{processRequest}}"
-  searchEndpoint="[[searchEndpoint]]"
-  searchFields="[[searchFields]]"
-  searchParamters="{{searchParameters}}">
+  domain="[[domain]]"
+  facets-query="[[facetsQuery]]"
+  search-keys="[[searchKeys]]"
+  process-request="{{processRequest}}"
+  search-endpoint="[[searchEndpoint]]"
+  search-fields="[[searchFields]]"
+  search-parameters="{{searchParameters}}">
 </facet-panel>
 ```
 @demo demo/index.html
@@ -41,35 +43,14 @@ A Polymer Element containing a group of facet-lists and date-range-facets.
 
 <dom-module id="facet-panel">
   <template>
-    <style>
-      .link {
-        color: var(--secondary-text-color);
-        cursor: pointer;
-        line-height: 30px;
-      }
+    <style include="facet-panel-styles"></style>
+    <style include="iron-flex iron-flex-alignment"></style>
 
-      .link:hover {
-        color: var(--primary-text-color);
-      }
-
-      .link iron-icon {
-        --iron-icon-height: 20px;
-        --iron-icon-width: 20px;
-        padding-bottom: 4px;
-      }
-
-      .link span {
-        font-size: 14px;
-        font-style: italic;
-        text-decoration: underline;
-      }
-    </style>
-
-    <paper-header-panel drawer>
+    <paper-header-panel>
       <template is="dom-if" if="[[searchParameters]]">
         <paper-toolbar class="drawer-header">
           <div class="layout vertical">
-            <div class="selected-facets-header">Project: [[findDomain(params, serverConfig)]]</div>
+            <div class="selected-facets-header">Project: [[domain]]</div>
 
             <template is="dom-if" if="[[!_noSearchParameters(searchParameters.*)]]">
               <div class="selected-facets-header">Search Terms</div>
@@ -103,7 +84,8 @@ A Polymer Element containing a group of facet-lists and date-range-facets.
                   <facet-list
                     class="facet"
                     query-url="[[searchEndpoint]]"
-                    name="[[item.key]]" title="[[item.title]]"
+                    name="[[item.key]]"
+                    title="[[item.title]]"
                     target="_blank"
                     result-function="[[item.facetTransform]]"
                     search-function="[[facetsQuery]]"
@@ -145,16 +127,16 @@ A Polymer Element containing a group of facet-lists and date-range-facets.
         is: 'facet-panel',
 
         properties: {
+          domain: {
+            type: String
+          },
+
           facetListsExpanded: {
             type: Boolean,
             default: true
           },
 
           facetsQuery: {
-            type: Object
-          },
-
-          item: {
             type: Object
           },
 
@@ -170,35 +152,40 @@ A Polymer Element containing a group of facet-lists and date-range-facets.
             type: Object
           },
 
-          searchParamters: {
+          searchParameters: {
+            type: Object
+          },
+
+          searchKeys: {
             type: Object
           }
         },
 
-        _toggleAllFacetLists: function() {
+        _toggleAllFacetLists: function () {
           var self = this;
           self.facetListsExpanded = !self.facetListsExpanded;
           // All facet lists should have the class 'facet'
           var allFacetListNames = document.querySelectorAll('.facet');
 
-          for(var i = 0, length = allFacetListNames.length; i < length; i++) {
+          for (var i = 0, length = allFacetListNames.length; i < length; i++) {
             allFacetListNames[i].opened = self.facetListsExpanded;
           }
         },
 
-        _getToggleAllFacetsText: function() {
+        _getToggleAllFacetsText: function () {
           return (this.facetListsExpanded ? 'Collapse' : 'Expand') + ' All';
         },
 
-        _getToggleAllFacetsIcon: function() {
+        _getToggleAllFacetsIcon: function () {
           return (this.facetListsExpanded ? 'icons:expand-less' : 'icons:expand-more');
         },
 
-        _noSearchParameters: function() {
+        _noSearchParameters: function (searchParameters) {
+          console.log(DigBehaviors.FilterBehavior.areAllFacetsDisabled(this.searchParameters));
           return DigBehaviors.FilterBehavior.areAllFacetsDisabled(this.searchParameters);
         },
 
-        _equals: function(a, b) {
+        _equals: function (a, b) {
           return a === b;
         }
       });
