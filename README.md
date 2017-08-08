@@ -14,6 +14,16 @@ A Polymer Element containing a group of facet-lists and date-range-facets.
 </facet-panel>
 ```
 
+### Styling
+
+`<facet-panel>` provides the following custom properties and mixins for styling:
+
+Custom property                                 | Description                                  | Default
+------------------------------------------------|----------------------------------------------|--------
+`--facet-panel-selected-facet-background-color` | The background color of the selected facets. | gray
+`--facet-panel-selected-facet-icon-hover-color` | The icon hover color of the selected facets. | white
+`--facet-panel-selected-facet-text-color`       | The text color of the selected facets.       | black
+
 ### Dependencies
 
 Dependencies are installed using [Bower](http://bower.io/):
