@@ -5,7 +5,6 @@ A Polymer Element containing a group of facet-lists and date-range-facets.
 ### Example
 ```html
 <facet-panel
-    domain="[[domain]]"
     facets-query="[[facetsQuery]]"
     search-keys="[[searchKeys]]"
     process-request="{{processRequest}}"

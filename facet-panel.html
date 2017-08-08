@@ -14,23 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<link rel="import" href="../../bower_components/date-range-facet/date-range-facet.html">
-<link rel="import" href="../../bower_components/facet-list/facet-list.html">
-<link rel="import" href="../../bower_components/filter-behavior/filter-behavior.html">
-<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html">
-<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
-<link rel="import" href="../../bower_components/selected-facets-display/selected-facets-display.html">
-<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../date-range-facet/date-range-facet.html">
+<link rel="import" href="../facet-list/facet-list.html">
+<link rel="import" href="../filter-behavior/filter-behavior.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../selected-facets-display/selected-facets-display.html">
 <link rel="import" href="facet-panel-styles.html">
 
 <!--
 A Polymer Element containing a group of facet-lists and date-range-facets.
+
 ### Example
 ```html
 <facet-panel
-  domain="[[domain]]"
   facets-query="[[facetsQuery]]"
   search-keys="[[searchKeys]]"
   process-request="{{processRequest}}"
@@ -39,6 +39,7 @@ A Polymer Element containing a group of facet-lists and date-range-facets.
   search-parameters="{{searchParameters}}">
 </facet-panel>
 ```
+
 @demo demo/index.html
 -->
 
@@ -51,8 +52,6 @@ A Polymer Element containing a group of facet-lists and date-range-facets.
       <template is="dom-if" if="[[searchParameters]]">
         <paper-toolbar class="drawer-header">
           <div class="layout vertical">
-            <div class="selected-facets-header">Project: [[domain]]</div>
-
             <template is="dom-if" if="[[!_noSearchParameters(searchParameters.*)]]">
               <div class="selected-facets-header">Search Terms</div>
             </template>
@@ -73,11 +72,9 @@ A Polymer Element containing a group of facet-lists and date-range-facets.
           <div data-type="documents">
             <div class="layout horizontal facet expand-collapse-all" title="Toggle All Facets" on-tap="_toggleAllFacetLists">
               <span class="flex">Facets</span>
-              <span>[[_getToggleAllFacetsText(facetListsExpanded)]]</span>
-              <iron-icon icon="[[_getToggleAllFacetsIcon(facetListsExpanded)]]"></iron-icon>
+              <span>[[_getToggleAllFacetsText(collapseFacets)]]</span>
+              <iron-icon icon="[[_getToggleAllFacetsIcon(collapseFacetLists)]]"></iron-icon>
             </div>
-
-            <!--<info-facets></info-facets>-->
 
             <template is="dom-repeat" items="[[searchFields]]">
               <template is="dom-if" if="[[item.facets]]">
@@ -129,113 +126,104 @@ A Polymer Element containing a group of facet-lists and date-range-facets.
 
         properties: {
           /**
-          * (Required)
-          *
-          * The Domain the project points to.
-          *
-          * @type {String}
-          */
-          domain: {
-            type: String
-          },
-
-          /**
-          * (Optional)
-          *
-          * Whether or not the facets are expanded.
-          *
-          * @type {Boolean}
-          * @default true
-          */
-          facetListsExpanded: {
+           * (Optional)
+           *
+           * Whether or not to collapse the facet lists.
+           *
+           * @type {Boolean}
+           * @default false
+           */
+          collapseFacetLists: {
             type: Boolean,
-            value: true
+            value: false
           },
 
           /**
-          * (Required)
-          *
-          * The query used by the facets.
-          *
-          * @type {Object}
-          */
+           * (Required)
+           *
+           * The query used by the facets.
+           *
+           * @type {Object}
+           */
           facetsQuery: {
             type: Object
           },
 
           /**
-          * (Required)
-          *
-          * The request object used by querys.
-          *
-          * @type {Object}
-          */
+           * (Required|Output)
+           *
+           * The request object used by querys.
+           *
+           * @type {Object}
+           */
           processRequest: {
+            notify: true,
             type: Object
           },
 
           /**
-          * (Required)
-          *
-          * The search endpoint used by querys.
-          *
-          * @type {Object}
-          */
+           * (Required)
+           *
+           * The search endpoint used by querys.
+           *
+           * @type {Object}
+           */
           searchEndpoint: {
             type: Object
           },
 
           /**
-          * (Required)
-          *
-          * The search fields used by the facets.
-          *
-          * @type {Object}
-          */
+           * (Required)
+           *
+           * The search fields used by the facets.
+           *
+           * @type {Object}
+           */
           searchFields: {
             type: Object
           },
 
           /**
-          * (Required)
-          *
-          * The search parameters used by the facets.
-          *
-          * @type {Object}
-          */
-          searchParameters: {
+           * (Required)
+           *
+           * The search keys used by the facets.
+           *
+           * @type {Object}
+           */
+          searchKeys: {
             type: Object
           },
 
           /**
-          * (Required)
-          *
-          * The search keys used by the facets.
-          *
-          * @type {Object}
-          */
-          searchKeys: {
+           * (Required|Output)
+           *
+           * The search parameters used by the facets.
+           *
+           * @type {Object}
+           */
+          searchParameters: {
+            notify: true,
             type: Object
           }
         },
 
         _toggleAllFacetLists: function() {
           var self = this;
-          self.facetListsExpanded = !self.facetListsExpanded;
+          self.collapseFacetLists = !self.collapseFacetLists;
           // All facet lists should have the class 'facet'
           var allFacetListNames = document.querySelectorAll('.facet');
 
           for (var i = 0, length = allFacetListNames.length; i < length; i++) {
-            allFacetListNames[i].opened = self.facetListsExpanded;
+            allFacetListNames[i].opened = !self.collapseFacetLists;
           }
         },
 
         _getToggleAllFacetsText: function() {
-          return (this.facetListsExpanded ? 'Collapse' : 'Expand') + ' All';
+          return (this.collapseFacetLists ? 'Expand' : 'Collapse') + ' All';
         },
 
         _getToggleAllFacetsIcon: function() {
-          return (this.facetListsExpanded ? 'icons:expand-less' : 'icons:expand-more');
+          return (this.collapseFacetLists ? 'icons:expand-more' : 'icons:expand-less');
         },
 
         _noSearchParameters: function(searchParameters) {

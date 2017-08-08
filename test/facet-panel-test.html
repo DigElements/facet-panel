@@ -46,30 +46,30 @@ limitations under the License.
       });
     });
 
-    test('_toggleAllFacetLists flips facetListsExpanded', function() {
+    test('_toggleAllFacetLists flips collapseFacetLists', function() {
       element._toggleAllFacetLists();
 
-      assert.equal(element.facetListsExpanded, false);
+      assert.equal(element.collapseFacetLists, true);
     });
 
     test('_getToggleAllFacetsText returns correct text', function() {
-      element.facetListsExpanded = true;
-
-      assert.equal(element._getToggleAllFacetsText(), 'Collapse All');
-
-      element.facetListsExpanded = false;
+      element.collapseFacetLists = true;
 
       assert.equal(element._getToggleAllFacetsText(), 'Expand All');
+
+      element.collapseFacetLists = false;
+
+      assert.equal(element._getToggleAllFacetsText(), 'Collapse All');
     });
 
     test('_getToggleAllFacetsIcon returns correct text', function() {
-      element.facetListsExpanded = true;
-
-      assert.equal(element._getToggleAllFacetsIcon(), 'icons:expand-less');
-
-      element.facetListsExpanded = false;
+      element.collapseFacetLists = true;
 
       assert.equal(element._getToggleAllFacetsIcon(), 'icons:expand-more');
+
+      element.collapseFacetLists = false;
+
+      assert.equal(element._getToggleAllFacetsIcon(), 'icons:expand-less');
     });
 
     test('_noSearchParameters compares correctly', function() {
