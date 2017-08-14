@@ -17,6 +17,7 @@ limitations under the License.
 <!doctype html>
 
 <html>
+
 <head>
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <title>dig-logger</title>
@@ -26,76 +27,257 @@ limitations under the License.
 </head>
 
 <body>
-<test-fixture id="facet-panel-fixture">
-  <template>
-    <facet-panel></facet-panel>
-  </template>
-</test-fixture>
+  <test-fixture id="facet-panel-fixture">
+    <template>
+      <facet-panel></facet-panel>
+    </template>
+  </test-fixture>
 
-<script>
-  /* globals suite, test, assert, setup, fixture, flush */
-  /* jshint -W030 */
+  <script>
+    /* globals suite, test, assert, setup, fixture, flush */
+    /* jshint -W030 */
 
-  suite('facet-panel tests', function() {
-    var element;
+    suite('facet-panel tests', function () {
+      var element;
 
-    setup(function(done) {
-      element = fixture('facet-panel-fixture');
-      flush(function() {
-        done();
+      setup(function (done) {
+        element = fixture('facet-panel-fixture');
+        flush(function () {
+          done();
+        });
       });
-    });
 
-    test('_toggleAllFacetLists flips collapseFacetLists', function() {
-      element._toggleAllFacetLists();
+      test('_toggleAllFacetLists flips collapseFacetLists', function () {
+        element._toggleAllFacetLists();
+        assert.equal(element.collapseFacetLists, true);
+      });
 
-      assert.equal(element.collapseFacetLists, true);
-    });
+      test('_getToggleAllFacetsText returns correct text', function () {
+        element.collapseFacetLists = true;
+        assert.equal(element._getToggleAllFacetsText(), 'Expand All');
 
-    test('_getToggleAllFacetsText returns correct text', function() {
-      element.collapseFacetLists = true;
+        element.collapseFacetLists = false;
+        assert.equal(element._getToggleAllFacetsText(), 'Collapse All');
+      });
 
-      assert.equal(element._getToggleAllFacetsText(), 'Expand All');
+      test('_getToggleAllFacetsIcon returns correct text', function () {
+        element.collapseFacetLists = true;
+        assert.equal(element._getToggleAllFacetsIcon(), 'icons:expand-more');
 
-      element.collapseFacetLists = false;
+        element.collapseFacetLists = false;
+        assert.equal(element._getToggleAllFacetsIcon(), 'icons:expand-less');
+      });
 
-      assert.equal(element._getToggleAllFacetsText(), 'Collapse All');
-    });
+      test('_noSearchParameters compares correctly', function () {
+        assert.equal(element._noSearchParameters(null), true);
+        assert.equal(element._noSearchParameters({}), true);
 
-    test('_getToggleAllFacetsIcon returns correct text', function() {
-      element.collapseFacetLists = true;
-
-      assert.equal(element._getToggleAllFacetsIcon(), 'icons:expand-more');
-
-      element.collapseFacetLists = false;
-
-      assert.equal(element._getToggleAllFacetsIcon(), 'icons:expand-less');
-    });
-
-    test('_noSearchParameters compares correctly', function() {
-      assert.equal(element._noSearchParameters(null), true);
-      assert.equal(element._noSearchParameters({}), true);
-
-      element.searchParameters = {
-        postingDate: {
-          dateEnd: {
-            enabled: true
-          },
-          dateStart: {
-            enabled: true
+        element.searchParameters = {
+          postingDate: {
+            dateEnd: {
+              enabled: true
+            },
+            dateStart: {
+              enabled: true
+            }
           }
         }
-      }
 
-      assert.equal(element._noSearchParameters(null), false);
-    });
+        assert.equal(element._noSearchParameters(null), false);
+      });
 
-    test('_equals compares correctly', function() {
-      assert.equal(element._equals({},[]), false);
-      assert.equal(element._equals('abc',['abc']), false);
-      assert.equal(element._equals('abc','abc'), true);
+      test('_equals compares correctly', function () {
+        assert.equal(element._equals({}, []), false);
+        assert.equal(element._equals('abc', ['abc']), false);
+        assert.equal(element._equals('abc', 'abc'), true);
+      });
+
+      test('header panel should exist', function () {
+        var header = element.$$('paper-header-panel');
+        expect(header).to.exist;
+      });
+
+      test('toolbar should not exist if searchParameters is not defined', function () {
+        var toolbar = element.$$('paper-toolbar');
+        expect(toolbar).to.not.exist;
+      });
+
+      test('toolbar should exist if searchParameters is defined', function () {
+        element.searchParameters = {
+          postingDate: {
+            dateEnd: {
+              enabled: true
+            },
+            dateStart: {
+              enabled: true
+            }
+          }
+        }
+
+        var toolbar = element.$$('paper-toolbar');
+        expect(toolbar).to.not.exist;
+      });
+
+      test('pages should not exist if searchParameters is not defined', function () {
+        var pages = element.$$('iron-pages');
+        expect(pages).to.not.exist;
+      });
+
+      test('pages should exist if searchParameters is defined', function () {
+        element.searchParameters = {
+          postingDate: {
+            dateEnd: {
+              enabled: true
+            },
+            dateStart: {
+              enabled: true
+            }
+          }
+        }
+
+        var pages = element.$$('iron-pages');
+        expect(pages).to.not.exist;
+      });
+
+      test('facets display should not exist if searchKeys is not defined', function () {
+        element.searchParameters = {
+          postingDate: {
+            dateEnd: {
+              enabled: true
+            },
+            dateStart: {
+              enabled: true
+            }
+          }
+        }
+
+        var facetsDisplay = element.$$('selected-facets-display');
+        expect(facetsDisplay).to.not.exist;
+      });
+
+      test('facets list and date range facet should not exist if searchFields is not defined', function () {
+        flush(function () {
+          var facetList = Polymer.dom(element.root).querySelectorAll('facet-list');
+          expect(facetList[0]).to.not.exist;
+          var dateFacet = Polymer.dom(element.root).querySelectorAll('date-range-facet');
+          expect(dateFacet[0]).to.not.exist;
+          done();
+        });
+      });
+
+      test('facets list should exist if searchFields is defined', function () {
+        flush(function () {
+          element.searchParameters = {
+            postingDate: {
+              dateEnd: {
+                enabled: true
+              },
+              dateStart: {
+                enabled: true
+              }
+            }
+          }
+
+          element.searchFields = [{
+            facets: true,
+            facetTransform: function () {},
+            key: 'city',
+            title: 'City',
+            type: 'location'
+          }, {
+            facets: true,
+            facetTransform: function () {},
+            key: 'email',
+            title: 'Email',
+            type: 'email'
+          }];
+
+          var facetList = Polymer.dom(element.root).querySelectorAll('facet-list');
+
+          expect(facetList[0]).to.exist;
+          assert.equal(facetList[0].name, 'city');
+          expect(facetList[1]).to.exist;
+          assert.equal(facetList[1].name, 'email');
+          assert.equal(facetList.length, 2);
+          done();
+        });
+      });
+
+      test('date range facet should exist if searchFields is defined', function () {
+        flush(function () {
+          element.searchParameters = {
+            postingDate: {
+              dateEnd: {
+                enabled: true
+              },
+              dateStart: {
+                enabled: true
+              }
+            }
+          }
+
+          element.searchFields = [{
+            dateProperties: {
+              start: {
+                key: 'date_posted',
+                title: 'Date_posted',
+                dateIdentifier: '01/01/2017'
+              },
+              end: {
+                key: 'date_posted',
+                title: 'Date_posted',
+                dateIdentifier: '01/01/2017'
+              }
+            },
+            facets: true,
+            facetTransform: function () {},
+            key: 'date posted',
+            title: 'Date posted',
+            type: 'date'
+          }];
+
+          var dateFacet = Polymer.dom(element.root).querySelectorAll('date-range-facet');
+          expect(dateFacet[0]).to.exist;
+          done();
+        });
+      });
+
+      test('selected facets list should not exist if searchKeys is not defined', function () {
+        flush(function () {
+          var facetList = Polymer.dom(element.root).querySelectorAll('selected-facets-display');
+          expect(facetList[0]).to.not.exist;
+          done();
+        });
+      });
+
+      test('selected facets list should exist if searchKeys is defined', function () {
+        flush(function () {
+          element.searchParameters = {
+            postingDate: {
+              dateEnd: {
+                enabled: true
+              },
+              dateStart: {
+                enabled: true
+              }
+            },
+            city: {
+              key: 'city',
+              value: 'city name'
+            }
+          }
+
+          element.searchKeys = ['date_posted', 'city'];
+
+          var facetList = Polymer.dom(element.root).querySelectorAll('selected-facets-display');
+          expect(facetList[0]).to.exist;
+          expect(facetList[1]).to.exist;
+          assert.equal(facetList.length, 2);
+          done();
+        });
+      });
     });
-  });
-</script>
+  </script>
 </body>
+
 </html>
