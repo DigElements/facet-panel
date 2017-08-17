@@ -180,8 +180,11 @@ Custom property                                 | Description                   
     (function () {
       'use strict';
 
+      /* globals DigBehaviors */
       Polymer({
         is: 'facet-panel',
+
+        behaviors: [DigBehaviors.FilterBehavior],
 
         properties: {
           /**
@@ -286,7 +289,7 @@ Custom property                                 | Description                   
         },
 
         _noSearchParameters: function(searchParameters) {
-          return DigBehaviors.FilterBehavior.areAllFacetsDisabled(this.searchParameters);
+          return this.areAllFacetsDisabled(this.searchParameters);
         },
 
         _equals: function(a, b) {
