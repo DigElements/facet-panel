@@ -22,6 +22,45 @@ limitations under the License.
 
 <body unresolved>
   <template is="dom-bind" id="demo">
-    <span>TODO</span>
+    <paper-drawer-panel drawer drawer-width="320px">
+      <facet-panel
+        drawer search-keys="[[searchKeys]]"
+        search-fields="[[searchFields]]"
+        search-parameters="{{searchParameters}}">
+      </facet-panel>
+      <div main>Note: facet headers will not show up without a configured ES searchEndpoint</div>
+    </paper-drawer-panel>
   </template>
+
+  <script>
+    (function (document) {
+      var demo = document.querySelector('#demo');
+      demo.searchParameters = {
+        postingDate: {
+          dateEnd: {
+            enabled: true
+          },
+          dateStart: {
+            enabled: true
+          }
+        }
+      }
+
+      demo.searchFields = [{
+        facets: true,
+        facetTransform: function() {},
+        key: 'city',
+        title: 'City',
+        type: 'location'
+      }, {
+        facets: true,
+        facetTransform: function() {},
+        key: 'email',
+        title: 'Email',
+        type: 'email'
+      }];
+
+      demo.searchKeys = ['city', 'email'];
+    })(document);
+  </script>
 </body>
