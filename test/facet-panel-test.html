@@ -37,22 +37,20 @@ limitations under the License.
     /* globals suite, test, assert, setup, fixture, flush */
     /* jshint -W030 */
 
-    suite('facet-panel tests', function () {
+    suite('facet-panel tests', function() {
       var element;
 
-      setup(function (done) {
+      setup(function(done) {
         element = fixture('facet-panel-fixture');
-        flush(function () {
-          done();
-        });
+        flush(done);
       });
 
-      test('_toggleAllFacetLists flips collapseFacetLists', function () {
+      test('_toggleAllFacetLists flips collapseFacetLists', function() {
         element._toggleAllFacetLists();
         assert.equal(element.collapseFacetLists, true);
       });
 
-      test('_getToggleAllFacetsText returns correct text', function () {
+      test('_getToggleAllFacetsText returns correct text', function() {
         element.collapseFacetLists = true;
         assert.equal(element._getToggleAllFacetsText(), 'Expand All');
 
@@ -60,7 +58,7 @@ limitations under the License.
         assert.equal(element._getToggleAllFacetsText(), 'Collapse All');
       });
 
-      test('_getToggleAllFacetsIcon returns correct text', function () {
+      test('_getToggleAllFacetsIcon returns correct text', function() {
         element.collapseFacetLists = true;
         assert.equal(element._getToggleAllFacetsIcon(), 'icons:expand-more');
 
@@ -68,7 +66,7 @@ limitations under the License.
         assert.equal(element._getToggleAllFacetsIcon(), 'icons:expand-less');
       });
 
-      test('_noSearchParameters compares correctly', function () {
+      test('_noSearchParameters compares correctly', function() {
         assert.equal(element._noSearchParameters(null), true);
         assert.equal(element._noSearchParameters({}), true);
 
@@ -86,23 +84,23 @@ limitations under the License.
         assert.equal(element._noSearchParameters(null), false);
       });
 
-      test('_equals compares correctly', function () {
+      test('_equals compares correctly', function() {
         assert.equal(element._equals({}, []), false);
         assert.equal(element._equals('abc', ['abc']), false);
         assert.equal(element._equals('abc', 'abc'), true);
       });
 
-      test('header panel should exist', function () {
+      test('header panel should exist', function() {
         var header = element.$$('paper-header-panel');
         expect(header).to.exist;
       });
 
-      test('toolbar should not exist if searchParameters is not defined', function () {
+      test('toolbar should not exist if searchParameters is not defined', function() {
         var toolbar = element.$$('paper-toolbar');
         expect(toolbar).to.not.exist;
       });
 
-      test('toolbar should exist if searchParameters is defined', function () {
+      test('toolbar should exist if searchParameters is defined', function() {
         element.searchParameters = {
           postingDate: {
             dateEnd: {
@@ -118,12 +116,12 @@ limitations under the License.
         expect(toolbar).to.not.exist;
       });
 
-      test('pages should not exist if searchParameters is not defined', function () {
+      test('pages should not exist if searchParameters is not defined', function() {
         var pages = element.$$('iron-pages');
         expect(pages).to.not.exist;
       });
 
-      test('pages should exist if searchParameters is defined', function () {
+      test('pages should exist if searchParameters is defined', function() {
         element.searchParameters = {
           postingDate: {
             dateEnd: {
@@ -139,7 +137,7 @@ limitations under the License.
         expect(pages).to.not.exist;
       });
 
-      test('facets display should not exist if searchKeys is not defined', function () {
+      test('facets display should not exist if searchKeys is not defined', function() {
         element.searchParameters = {
           postingDate: {
             dateEnd: {
@@ -155,45 +153,41 @@ limitations under the License.
         expect(facetsDisplay).to.not.exist;
       });
 
-      test('facets list and date range facet should not exist if searchFields is not defined', function () {
-        flush(function () {
-          var facetList = Polymer.dom(element.root).querySelectorAll('facet-list');
-          expect(facetList[0]).to.not.exist;
-          var dateFacet = Polymer.dom(element.root).querySelectorAll('date-range-facet');
-          expect(dateFacet[0]).to.not.exist;
-          done();
-        });
+      test('facets list and date range facet should not exist if searchFields is not defined', function() {
+        var facetList = Polymer.dom(element.root).querySelectorAll('facet-list');
+        expect(facetList[0]).to.not.exist;
+        var dateFacet = Polymer.dom(element.root).querySelectorAll('date-range-facet');
+        expect(dateFacet[0]).to.not.exist;
       });
 
-      test('facets list should exist if searchFields is defined', function () {
-        flush(function () {
-          element.searchParameters = {
-            postingDate: {
-              dateEnd: {
-                enabled: true
-              },
-              dateStart: {
-                enabled: true
-              }
+      test('facets list should exist if searchFields is defined', function(done) {
+        element.searchParameters = {
+          postingDate: {
+            dateEnd: {
+              enabled: true
+            },
+            dateStart: {
+              enabled: true
             }
           }
+        }
 
-          element.searchFields = [{
-            facets: true,
-            facetTransform: function () {},
-            key: 'city',
-            title: 'City',
-            type: 'location'
-          }, {
-            facets: true,
-            facetTransform: function () {},
-            key: 'email',
-            title: 'Email',
-            type: 'email'
-          }];
+        element.searchFields = [{
+          facets: true,
+          facetTransform: function() {},
+          key: 'city',
+          title: 'City',
+          type: 'location'
+        }, {
+          facets: true,
+          facetTransform: function() {},
+          key: 'email',
+          title: 'Email',
+          type: 'email'
+        }];
 
+        flush(function() {
           var facetList = Polymer.dom(element.root).querySelectorAll('facet-list');
-
           expect(facetList[0]).to.exist;
           assert.equal(facetList[0].name, 'city');
           expect(facetList[1]).to.exist;
@@ -203,72 +197,69 @@ limitations under the License.
         });
       });
 
-      test('date range facet should exist if searchFields is defined', function () {
-        flush(function () {
-          element.searchParameters = {
-            postingDate: {
-              dateEnd: {
-                enabled: true
-              },
-              dateStart: {
-                enabled: true
-              }
+      test('date range facet should exist if searchFields is defined', function(done) {
+        element.searchParameters = {
+          postingDate: {
+            dateEnd: {
+              enabled: true
+            },
+            dateStart: {
+              enabled: true
             }
           }
+        }
 
-          element.searchFields = [{
-            dateProperties: {
-              start: {
-                key: 'date_posted',
-                title: 'Date_posted',
-                dateIdentifier: '01/01/2017'
-              },
-              end: {
-                key: 'date_posted',
-                title: 'Date_posted',
-                dateIdentifier: '01/01/2017'
-              }
+        element.searchFields = [{
+          dateProperties: {
+            start: {
+              key: 'date_posted',
+              title: 'Date_posted',
+              dateIdentifier: '01/01/2017'
             },
-            facets: true,
-            facetTransform: function () {},
-            key: 'date posted',
-            title: 'Date posted',
-            type: 'date'
-          }];
+            end: {
+              key: 'date_posted',
+              title: 'Date_posted',
+              dateIdentifier: '01/01/2017'
+            }
+          },
+          facets: true,
+          facetTransform: function() {},
+          key: 'date posted',
+          title: 'Date posted',
+          type: 'date'
+        }];
 
+        flush(function() {
           var dateFacet = Polymer.dom(element.root).querySelectorAll('date-range-facet');
           expect(dateFacet[0]).to.exist;
           done();
         });
       });
 
-      test('selected facets list should not exist if searchKeys is not defined', function () {
-        flush(function () {
-          var facetList = Polymer.dom(element.root).querySelectorAll('selected-facets-display');
-          expect(facetList[0]).to.not.exist;
-          done();
-        });
+      test('selected facets list should not exist if searchKeys is not defined', function() {
+        var facetList = Polymer.dom(element.root).querySelectorAll('selected-facets-display');
+        expect(facetList[0]).to.not.exist;
       });
 
-      test('selected facets list should exist if searchKeys is defined', function () {
-        flush(function () {
-          element.searchParameters = {
-            postingDate: {
-              dateEnd: {
-                enabled: true
-              },
-              dateStart: {
-                enabled: true
-              }
+      test('selected facets list should exist if searchKeys is defined', function(done) {
+        element.searchParameters = {
+          postingDate: {
+            dateEnd: {
+              enabled: true
             },
-            city: {
-              key: 'city',
-              value: 'city name'
+            dateStart: {
+              enabled: true
             }
+          },
+          city: {
+            key: 'city',
+            value: 'city name'
           }
+        }
 
-          element.searchKeys = ['date_posted', 'city'];
+        element.searchKeys = ['date_posted', 'city'];
 
+        flush(function() {
           var facetList = Polymer.dom(element.root).querySelectorAll('selected-facets-display');
           expect(facetList[0]).to.exist;
           expect(facetList[1]).to.exist;

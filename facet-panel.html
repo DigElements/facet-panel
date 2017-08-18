@@ -20,6 +20,7 @@ limitations under the License.
 <link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../lodash-import/lodash.html">
 <link rel="import" href="../paper-drawer-panel/paper-drawer-panel.html">
 <link rel="import" href="../paper-header-panel/paper-header-panel.html">
 <link rel="import" href="../paper-toolbar/paper-toolbar.html">
@@ -143,7 +144,9 @@ Custom property                                 | Description                   
                     name="[[item.key]]"
                     title="[[item.title]]"
                     target="_blank"
+                    result-config="[[_createResultConfig(item.key, networkExpansionParameters.*)]]"
                     result-function="[[item.facetTransform]]"
+                    search-config="[[networkExpansionParameters]]"
                     search-function="[[facetsQuery]]"
                     search-parameters-property="[[item.key]]"
                     search-parameters="{{searchParameters}}"
@@ -213,6 +216,17 @@ Custom property                                 | Description                   
           },
 
           /**
+           * (Required)
+           *
+           * The network expansion parameters used by the facets.
+           *
+           * @type {Object}
+           */
+          networkExpansionParameters: {
+            type: Object
+          },
+
+          /**
            * (Required|Output)
            *
            * The request object used by querys.
@@ -268,6 +282,22 @@ Custom property                                 | Description                   
             notify: true,
             type: Object
           }
+        },
+
+        /**
+         * Creates and returns the result config for the facet list using the networkExpansionParameters and the given name.
+         *
+         * @param {String} name
+         * @return {Object}
+         * @private
+         */
+        _createResultConfig: function(name) {
+          return {
+            name: name,
+            isNetworkExpansion: !!(_.findKey(this.networkExpansionParameters || {}, function(key) {
+              return key;
+            }))
+          };
         },
 
         _toggleAllFacetLists: function() {
