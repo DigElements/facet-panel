@@ -67,8 +67,7 @@ limitations under the License.
       });
 
       test('_noSearchParameters compares correctly', function() {
-        assert.equal(element._noSearchParameters(null), true);
-        assert.equal(element._noSearchParameters({}), true);
+        assert.equal(element._noSearchParameters(), true);
 
         element.searchParameters = {
           postingDate: {
@@ -81,7 +80,7 @@ limitations under the License.
           }
         }
 
-        assert.equal(element._noSearchParameters(null), false);
+        assert.equal(element._noSearchParameters(), false);
       });
 
       test('_equals compares correctly', function() {

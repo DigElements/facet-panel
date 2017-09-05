@@ -1,7 +1,7 @@
 {
   "name": "facet-panel",
   "description": "A Polymer Element containing a group of facet-lists and date-range-facets.",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "authors": ["Next Century Corporation"],
   "license": "Apache-2.0",
   "keywords": [
@@ -16,9 +16,8 @@
     "/test/"
   ],
   "dependencies": {
-    "date-range-facet": "DigElements/date-range-facet#1.1.0",
+    "date-range-facet": "DigElements/date-range-facet#1.1.1",
     "facet-list": "DigElements/facet-list#1.3.3",
-    "filter-behavior": "DigElements/filter-behavior#1.0.0",
     "iron-elements": "PolymerElements/iron-elements#^1.0.10",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#1.3.1",
     "lodash-import": "DigElements/lodash-import#~1.0.1",

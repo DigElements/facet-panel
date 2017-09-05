@@ -16,7 +16,6 @@ limitations under the License.
 
 <link rel="import" href="../date-range-facet/date-range-facet.html">
 <link rel="import" href="../facet-list/facet-list.html">
-<link rel="import" href="../filter-behavior/filter-behavior.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
@@ -160,12 +159,8 @@ Custom property                                 | Description                   
                     header-title="[[item.title]]"
                     date-start-key="[[item.dateProperties.start.key]]"
                     date-start-title="[[item.dateProperties.start.title]]"
-                    date-start-prefix-label="[[item.dateProperties.start.title]]"
-                    date-start-identifier="[[item.dateProperties.start.dateIdentifier]]"
                     date-end-key="[[item.dateProperties.end.key]]"
                     date-end-title="[[item.dateProperties.end.title]]"
-                    date-end-prefix-label="[[item.dateProperties.end.title]]"
-                    date-end-identifier="[[item.dateProperties.end.dateIdentifier]]"
                     search-parameters-property="[[item.key]]"
                     search-parameters="{{searchParameters}}">
                   </date-range-facet>
@@ -184,11 +179,8 @@ Custom property                                 | Description                   
     (function () {
       'use strict';
 
-      /* globals DigBehaviors */
       Polymer({
         is: 'facet-panel',
-
-        behaviors: [DigBehaviors.FilterBehavior],
 
         properties: {
           /**
@@ -281,6 +273,30 @@ Custom property                                 | Description                   
           searchParameters: {
             notify: true,
             type: Object
+          },
+
+          /**
+           * (Optional)
+           *
+           * A function that returns whether all the search parameters in the given object are disabled (or empty).
+           *
+           * @type {Object}
+           * @default function
+           */
+          areSearchParametersDisabled: {
+            type: Object,
+            value: function() {
+              return function(searchParameters) {
+                return _.keys(searchParameters).every(function(type) {
+                  if(_.isEmpty(searchParameters[type])) {
+                    return true;
+                  }
+                  return _.keys(searchParameters[type]).every(function(term) {
+                    return !searchParameters[type][term].enabled;
+                  });
+                });
+              };
+            }
           }
         },
 
@@ -319,8 +335,8 @@ Custom property                                 | Description                   
           return (this.collapseFacetLists ? 'icons:expand-more' : 'icons:expand-less');
         },
 
-        _noSearchParameters: function(searchParameters) {
-          return this.areAllFacetsDisabled(this.searchParameters);
+        _noSearchParameters: function() {
+          return this.areSearchParametersDisabled(this.searchParameters);
         },
 
         _equals: function(a, b) {
