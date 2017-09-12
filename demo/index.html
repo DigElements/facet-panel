@@ -16,51 +16,189 @@ limitations under the License.
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
   <link rel="import" href="../facet-panel.html">
 </head>
 
 <body unresolved>
-  <template is="dom-bind" id="demo">
-    <paper-drawer-panel drawer drawer-width="320px">
-      <facet-panel
-        drawer search-keys="[[searchKeys]]"
-        search-fields="[[searchFields]]"
-        search-parameters="{{searchParameters}}">
-      </facet-panel>
-      <div main>Note: facet headers will not show up without a configured ES searchEndpoint</div>
-    </paper-drawer-panel>
-  </template>
+  <dom-bind id="demo">
+    <script>
+      (function (document) {
+        var demo = document.querySelector('dom-bind');
 
-  <script>
-    (function (document) {
-      var demo = document.querySelector('#demo');
-      demo.searchParameters = {
-        postingDate: {
-          dateEnd: {
-            enabled: true
-          },
-          dateStart: {
-            enabled: true
+        demo.textFunction = function(id) {
+          if(id === 'washington:dc:usa') {
+            return 'Washington, D.C.';
           }
-        }
-      }
+          if(id === 'new york:ny:usa') {
+            return 'New York, New York';
+          }
+          if(id === 'columbia:md:usa') {
+            return 'Columbia, Maryland';
+          }
+          if(id === '1234567890') {
+            return '123-456-7890';
+          }
+          if(id === '9876543210') {
+            return '987-654-3210';
+          }
+          if(id === '1-2223334444') {
+            return '1-222-333-4444';
+          }
+          return id;
+        };
 
-      demo.searchFields = [{
-        facets: true,
-        facetTransform: function() {},
-        key: 'city',
-        title: 'City',
-        type: 'location'
-      }, {
-        facets: true,
-        facetTransform: function() {},
-        key: 'email',
-        title: 'Email',
-        type: 'email'
-      }];
+        demo.searchParameters = {
+          city: {},
+          date: {
+            end: {},
+            start: {}
+          },
+          email: {},
+          phone: {},
+          username: {}
+        };
 
-      demo.searchKeys = ['city', 'email'];
-    })(document);
-  </script>
+        demo.searchFields = [{
+          facets: true,
+          key: 'city',
+          results: [{
+            count: 10,
+            id: 'washington:dc:usa',
+            text: 'Washington, D.C.'
+          }, {
+            count: 5,
+            id: 'new york:ny:usa',
+            text: 'New York, New York'
+          }, {
+            count: 1,
+            id: 'columbia:md:usa',
+            text: 'Columbia, Maryland'
+          }],
+          title: 'City',
+          type: 'location'
+        }, {
+          facets: true,
+          key: 'email',
+          results: [{
+            count: 1,
+            id: 'email@address.com',
+            text: 'email@address.com'
+          }],
+          title: 'Email Address',
+          type: 'email'
+        }, {
+          facets: true,
+          key: 'phone',
+          results: [{
+            count: 50,
+            id: '1234567890',
+            text: '123-456-7890'
+          }, {
+            count: 25,
+            id: '9876543210',
+            text: '987-654-3210'
+          }, {
+            count: 10,
+            id: '1-2223334444',
+            text: '1-222-333-4444'
+          }],
+          title: 'Telephone Number',
+          type: 'phone'
+        }, {
+          facets: true,
+          key: 'username',
+          results: [{
+            count: 100,
+            id: 'testUser',
+            text: 'testUser'
+          }],
+          title: 'Username',
+          type: 'username'
+        }, {
+          dateProperties: {
+            end: {
+              key: 'end',
+              title: 'End Date'
+            },
+            start: {
+              key: 'start',
+              title: 'Start Date'
+            }
+          },
+          facets: true,
+          key: 'date',
+          title: 'Date',
+          type: 'date'
+        }];
+
+        demo.searchKeys = ['city', 'email', 'phone', 'username', 'date'];
+
+        demo.setSearchParameters = function() {
+          demo.set('searchParameters', {
+            city: {
+              'washington:dc:usa': {
+                category: 'City',
+                enabled: true,
+                key: 'washington:dc:usa',
+                text: 'Washington, D.C.'
+              }
+            },
+            date: {
+              end: {},
+              start: {}
+            },
+            email: {
+              'email@address.com': {
+                category: 'Email Address',
+                enabled: true,
+                key: 'email@address.com',
+                text: 'email@address.com'
+              }
+            },
+            phone: {
+              1234567890: {
+                category: 'Telephone Number',
+                enabled: true,
+                key: '1234567890',
+                text: '123-456-7890'
+              }
+            },
+            username: {
+              testUser: {
+                category: 'Username',
+                enabled: true,
+                key: 'testUser',
+                text: 'testUser'
+              }
+            }
+          });
+        };
+
+        demo.stringify = function(object) {
+          return JSON.stringify(object);
+        };
+      })(document);
+    </script>
+
+    <template is="dom-bind">
+      <paper-drawer-panel drawer-width="320px">
+        <facet-panel slot="drawer"
+          search-fields="[[searchFields]]"
+          search-keys="[[searchKeys]]"
+          search-parameters="{{searchParameters}}"
+          text-function="[[textFunction]]">
+
+          Slotted Content
+        </facet-panel>
+
+        <div slot="main" style="padding: 20px;">
+          <p>Search Fields: <strong>[[stringify(searchFields)]]</strong></p>
+          <p>Search Keys: <strong>[[stringify(searchKeys)]]</strong></p>
+          <p>Search Parameters: <strong>[[stringify(searchParameters, searchParameters.*)]]</strong></p>
+          <p><a href="#" on-tap="setSearchParameters">Set Sample Search Parameters</a></p>
+        </div>
+      </paper-drawer-panel>
+    </template>
+  </dom-bind>
 </body>

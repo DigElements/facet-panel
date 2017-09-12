@@ -18,7 +18,6 @@ limitations under the License.
 <link rel="import" href="../facet-list/facet-list.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
-<link rel="import" href="../iron-pages/iron-pages.html">
 <link rel="import" href="../lodash-import/lodash.html">
 <link rel="import" href="../paper-drawer-panel/paper-drawer-panel.html">
 <link rel="import" href="../paper-header-panel/paper-header-panel.html">
@@ -58,26 +57,26 @@ Custom property                                 | Description                   
     <style include="iron-flex iron-flex-alignment"></style>
 
     <style>
-      iron-pages > * {
+      .facets {
         padding: 20px;
       }
 
-      iron-pages .expand-collapse-all {
+      .expand-collapse-all {
         cursor: pointer;
         font-weight: 500;
         line-height: 24px;
       }
 
-      iron-pages date-range-facet ::content iron-collapse {
-        margin-bottom: 20px;
+      date-range-facet ::slotted(iron-collapse) {
+        margin-bottom: 40px;
       }
 
-      iron-pages date-range-facet,
-      iron-pages facet-list {
-        margin: 10px 0 0;
+      date-range-facet,
+      facet-list {
+        margin: 10px 0;
       }
 
-      .drawer-header {
+      paper-toolbar {
         --paper-toolbar-height: auto;
         --paper-toolbar-content: {
           padding: 0;
@@ -101,15 +100,17 @@ Custom property                                 | Description                   
         --selected-facet-text-color: var(--facet-panel-selected-facet-text-color, black);
       }
 
-      selected-facets-display ::content .item {
-        border-radius: 3px;
+      selected-facets-display {
+        --selected-facet-item-style-mixin: {
+          border-radius: 3px;
+        };
       }
     </style>
 
     <paper-header-panel>
       <template is="dom-if" if="[[searchParameters]]">
-        <paper-toolbar class="drawer-header">
-          <div class="layout vertical">
+        <paper-toolbar slot="header">
+          <div class="layout vertical" slot="top">
             <template is="dom-if" if="[[!_noSearchParameters(searchParameters.*)]]">
               <div class="selected-facets-header">Search Terms</div>
             </template>
@@ -126,51 +127,51 @@ Custom property                                 | Description                   
           </div>
         </paper-toolbar>
 
-        <iron-pages attr-for-selected="data-type" selected="documents">
-          <div data-type="documents">
-            <div class="layout horizontal facet expand-collapse-all" title="Toggle All Facets" on-tap="_toggleAllFacetLists">
-              <span class="flex">Facets</span>
-              <span>[[_getToggleAllFacetsText(collapseFacets)]]</span>
-              <iron-icon icon="[[_getToggleAllFacetsIcon(collapseFacetLists)]]"></iron-icon>
-            </div>
+        <div class="facets">
+          <div class="layout horizontal facet expand-collapse-all" title="Toggle All Facets" on-tap="_toggleAllFacetLists">
+            <span class="flex">Facets</span>
+            <span>[[_getToggleAllFacetsText(collapseFacets)]]</span>
+            <iron-icon icon="[[_getToggleAllFacetsIcon(collapseFacetLists)]]"></iron-icon>
+          </div>
 
-            <template is="dom-repeat" items="[[searchFields]]">
-              <template is="dom-if" if="[[item.facets]]">
-                <template is="dom-if" if="[[!_equals(item.type, 'date')]]">
-                  <facet-list
-                    class="facet"
-                    query-url="[[searchEndpoint]]"
-                    name="[[item.key]]"
-                    title="[[item.title]]"
-                    target="_blank"
-                    result-config="[[_createResultConfig(item.key, networkExpansionParameters.*)]]"
-                    result-function="[[item.facetTransform]]"
-                    search-config="[[networkExpansionParameters]]"
-                    search-function="[[facetsQuery]]"
-                    search-parameters-property="[[item.key]]"
-                    search-parameters="{{searchParameters}}"
-                    process-request="{{processRequest}}">
-                  </facet-list>
-                </template>
+          <template is="dom-repeat" items="[[searchFields]]">
+            <template is="dom-if" if="[[item.facets]]">
+              <template is="dom-if" if="[[!_equals(item.type, 'date')]]">
+                <facet-list
+                  class="facet"
+                  query-url="[[searchEndpoint]]"
+                  name="[[item.key]]"
+                  title="[[item.title]]"
+                  target="_blank"
+                  result-config="[[_createResultConfig(item.key, networkExpansionParameters.*)]]"
+                  result-function="[[item.facetTransform]]"
+                  result-list="{{item.results}}"
+                  search-config="[[networkExpansionParameters]]"
+                  search-function="[[facetsQuery]]"
+                  search-parameters-property="[[item.key]]"
+                  text-function="[[textFunction]]"
+                  search-parameters="{{searchParameters}}"
+                  process-request="{{processRequest}}">
+                </facet-list>
+              </template>
 
-                <template is="dom-if" if="[[_equals(item.type, 'date')]]">
-                  <date-range-facet
-                    class="facet"
-                    header-title="[[item.title]]"
-                    date-start-key="[[item.dateProperties.start.key]]"
-                    date-start-title="[[item.dateProperties.start.title]]"
-                    date-end-key="[[item.dateProperties.end.key]]"
-                    date-end-title="[[item.dateProperties.end.title]]"
-                    search-parameters-property="[[item.key]]"
-                    search-parameters="{{searchParameters}}">
-                  </date-range-facet>
-                </template>
+              <template is="dom-if" if="[[_equals(item.type, 'date')]]">
+                <date-range-facet
+                  class="facet"
+                  header-title="[[item.title]]"
+                  date-start-key="[[item.dateProperties.start.key]]"
+                  date-start-title="[[item.dateProperties.start.title]]"
+                  date-end-key="[[item.dateProperties.end.key]]"
+                  date-end-title="[[item.dateProperties.end.title]]"
+                  search-parameters-property="[[item.key]]"
+                  search-parameters="{{searchParameters}}">
+                </date-range-facet>
               </template>
             </template>
+          </template>
 
-            <content></content>
-          </div>
-        </iron-pages>
+          <slot></slot>
+        </div>
       </template>
     </paper-header-panel>
   </template>
@@ -278,6 +279,17 @@ Custom property                                 | Description                   
           /**
            * (Optional)
            *
+           * A function given to the `facet-list` to transform the ID into the text for the object.
+           *
+           * @type {Function}
+           */
+          textFunction: {
+            type: Object
+          },
+
+          /**
+           * (Optional)
+           *
            * A function that returns whether all the search parameters in the given object are disabled (or empty).
            *
            * @type {Object}
@@ -320,7 +332,7 @@ Custom property                                 | Description                   
           var self = this;
           self.collapseFacetLists = !self.collapseFacetLists;
           // All facet lists should have the class 'facet'
-          var allFacetListNames = document.querySelectorAll('.facet');
+          var allFacetListNames = Polymer.dom(this.root).querySelectorAll('.facet');
 
           for (var i = 0, length = allFacetListNames.length; i < length; i++) {
             allFacetListNames[i].opened = !self.collapseFacetLists;
