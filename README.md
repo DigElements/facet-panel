@@ -18,11 +18,21 @@ A Polymer Element containing a group of facet-lists and date-range-facets.
 
 `<facet-panel>` provides the following custom properties and mixins for styling:
 
-Custom property                                 | Description                                  | Default
-------------------------------------------------|----------------------------------------------|--------
-`--facet-panel-selected-facet-background-color` | The background color of the selected facets. | gray
-`--facet-panel-selected-facet-icon-hover-color` | The icon hover color of the selected facets. | white
-`--facet-panel-selected-facet-text-color`       | The text color of the selected facets.       | black
+Custom property                                 | Description                                                         | Default
+------------------------------------------------|---------------------------------------------------------------------|--------
+`--facet-panel-bar-color`                       | The color of the single or left bars.                               | --paper-grey-400
+`--facet-panel-bar-count-color`                 | The color of the single or left count labels.                       | --paper-grey-900
+`--facet-panel-bar-height`                      | The height of the single or left bars.                              | 20px
+`--facet-panel-bar-title-color`                 | The color of the single or left title labels.                       | --paper-grey-900
+`--facet-panel-bar-title-hover-color`           | The color of the single or left title labels on hover (if a link).  | --paper-grey-900
+`--facet-panel-second-bar-color`                | The color of the right (second) bars.                               | --paper-grey-400
+`--facet-panel-second-bar-count-color`          | The color of the right (second) count labels.                       | --paper-grey-900
+`--facet-panel-second-bar-height`               | The height of the right (second) bars.                              | 20px
+`--facet-panel-second-bar-title-color`          | The color of the right (second) title labels.                       | --paper-grey-900
+`--facet-panel-second-bar-title-hover-color`    | The color of the right (second) title labels on hover (if a link).  | --paper-grey-900
+`--facet-panel-selected-facet-background-color` | The background color of the selected facets.                        | --paper-grey-400
+`--facet-panel-selected-facet-icon-hover-color` | The icon hover color of the selected facets.                        | white
+`--facet-panel-selected-facet-text-color`       | The text color of the selected facets.                              | --paper-grey-900
 
 ### Dependencies
 

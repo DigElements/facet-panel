@@ -21,6 +21,7 @@ limitations under the License.
 <link rel="import" href="../lodash-import/lodash.html">
 <link rel="import" href="../paper-drawer-panel/paper-drawer-panel.html">
 <link rel="import" href="../paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../paper-styles/color.html">
 <link rel="import" href="../paper-toolbar/paper-toolbar.html">
 <link rel="import" href="../selected-facets-display/selected-facets-display.html">
 
@@ -43,11 +44,21 @@ A Polymer Element containing a group of facet-lists and date-range-facets.
 
 `<facet-panel>` provides the following custom properties and mixins for styling:
 
-Custom property                                 | Description                                  | Default
-------------------------------------------------|----------------------------------------------|--------
-`--facet-panel-selected-facet-background-color` | The background color of the selected facets. | gray
-`--facet-panel-selected-facet-icon-hover-color` | The icon hover color of the selected facets. | white
-`--facet-panel-selected-facet-text-color`       | The text color of the selected facets.       | black
+Custom property                                 | Description                                                         | Default
+------------------------------------------------|---------------------------------------------------------------------|--------
+`--facet-panel-bar-color`                       | The color of the single or left bars.                               | --paper-grey-400
+`--facet-panel-bar-count-color`                 | The color of the single or left count labels.                       | --paper-grey-900
+`--facet-panel-bar-height`                      | The height of the single or left bars.                              | 20px
+`--facet-panel-bar-title-color`                 | The color of the single or left title labels.                       | --paper-grey-900
+`--facet-panel-bar-title-hover-color`           | The color of the single or left title labels on hover (if a link).  | --paper-grey-900
+`--facet-panel-second-bar-color`                | The color of the right (second) bars.                               | --paper-grey-400
+`--facet-panel-second-bar-count-color`          | The color of the right (second) count labels.                       | --paper-grey-900
+`--facet-panel-second-bar-height`               | The height of the right (second) bars.                              | 20px
+`--facet-panel-second-bar-title-color`          | The color of the right (second) title labels.                       | --paper-grey-900
+`--facet-panel-second-bar-title-hover-color`    | The color of the right (second) title labels on hover (if a link).  | --paper-grey-900
+`--facet-panel-selected-facet-background-color` | The background color of the selected facets.                        | --paper-grey-400
+`--facet-panel-selected-facet-icon-hover-color` | The icon hover color of the selected facets.                        | white
+`--facet-panel-selected-facet-text-color`       | The text color of the selected facets.                              | --paper-grey-900
 
 @demo demo/index.html
 -->
@@ -76,6 +87,19 @@ Custom property                                 | Description                   
         margin: 10px 0;
       }
 
+      facet-list {
+        --facet-list-bar-color: var(--facet-panel-bar-color, var(--paper-grey-400));
+        --facet-list-bar-count-color: var(--facet-panel-bar-count-color, var(--paper-grey-900));
+        --facet-list-bar-height: var(--facet-panel-bar-height, 20px);
+        --facet-list-bar-title-color: var(--facet-panel-bar-title-color, var(--paper-grey-900));
+        --facet-list-bar-title-hover-color: var(--facet-panel-bar-title-hover-color, var(--paper-grey-900));
+        --facet-list-second-bar-color: var(--facet-panel-second-bar-color, var(--paper-grey-400));
+        --facet-list-second-bar-count-color: var(--facet-panel-second-bar-count-color, var(--paper-grey-900));
+        --facet-list-second-bar-height: var(--facet-panel-second-bar-height, 20px);
+        --facet-list-second-bar-title-color: var(--facet-panel-second-bar-title-color, var(--paper-grey-900));
+        --facet-list-second-bar-title-hover-color: var(--facet-panel-second-bar-title-hover-color, var(--paper-grey-900));
+      }
+
       paper-toolbar {
         --paper-toolbar-height: auto;
         --paper-toolbar-content: {
@@ -95,9 +119,9 @@ Custom property                                 | Description                   
       }
 
       selected-facets-display {
-        --selected-facet-bg-color: var(--facet-panel-selected-facet-background-color, gray);
+        --selected-facet-bg-color: var(--facet-panel-selected-facet-background-color, var(--paper-grey-400));
         --selected-facet-icon-hover-color: var(--facet-panel-selected-facet-icon-hover-color, white);
-        --selected-facet-text-color: var(--facet-panel-selected-facet-text-color, black);
+        --selected-facet-text-color: var(--facet-panel-selected-facet-text-color, var(--paper-grey-900));
       }
 
       selected-facets-display {
