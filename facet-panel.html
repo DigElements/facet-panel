@@ -164,6 +164,7 @@ Custom property                                 | Description                   
                 <facet-list
                   class="facet"
                   query-url="[[searchEndpoint]]"
+                  date-fields="[[dateFields]]"
                   name="[[item.key]]"
                   title="[[item.title]]"
                   target="_blank"
@@ -208,6 +209,18 @@ Custom property                                 | Description                   
         is: 'facet-panel',
 
         properties: {
+          /**
+           * (Required)
+           *
+           * A collection of date fields mapped to objects containing the {String} `start` and {String} `end` property of each date for the
+           * `query-builder` in the child elements of `facet-list`.
+           *
+           * @type {Object}
+           */
+          dateFields: {
+            type: Object
+          },
+
           /**
            * (Optional)
            *
