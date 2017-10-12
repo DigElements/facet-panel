@@ -167,6 +167,7 @@ Custom property                                 | Description                   
                   class="facet"
                   query-url="[[searchEndpoint]]"
                   date-fields="[[dateFields]]"
+                  image-style-class="[[imageStyleClass]]"
                   name="[[item.key]]"
                   title="[[item.title]]"
                   target="_blank"
@@ -245,6 +246,19 @@ Custom property                                 | Description                   
            */
           facetsQuery: {
             type: Object
+          },
+
+          /**
+           * (Optional)
+           *
+           * The style class for all the images in the panel.
+           *
+           * @type {String}
+           * @default ''
+           */
+          imageStyleClass: {
+            type: String,
+            value: ''
           },
 
           /**
