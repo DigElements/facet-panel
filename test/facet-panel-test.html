@@ -45,9 +45,10 @@ limitations under the License.
         flush(done);
       });
 
-      test('_toggleAllFacetLists flips collapseFacetLists', function() {
-        element._toggleAllFacetLists();
-        assert.equal(element.collapseFacetLists, true);
+      test('_equals compares correctly', function() {
+        assert.equal(element._equals({}, []), false);
+        assert.equal(element._equals('abc', ['abc']), false);
+        assert.equal(element._equals('abc', 'abc'), true);
       });
 
       test('_getToggleAllFacetsText returns correct text', function() {
@@ -64,6 +65,27 @@ limitations under the License.
 
         element.collapseFacetLists = false;
         assert.equal(element._getToggleAllFacetsIcon(), 'icons:expand-less');
+      });
+
+      test('_getNetworkExpansionFields does return expected list', function() {
+        assert.deepEqual(element._getNetworkExpansionFields({
+          a: true,
+          b: true,
+          c: false,
+          d: false
+        }, [{
+          key: 'a',
+          title: 'Field A'
+        }, {
+          key: 'b',
+          title: 'Field B'
+        }, {
+          key: 'c',
+          title: 'Field C'
+        }, {
+          key: 'd',
+          title: 'Field D'
+        }]), ['Field A', 'Field B']);
       });
 
       test('_noSearchParameters compares correctly', function() {
@@ -83,10 +105,9 @@ limitations under the License.
         assert.equal(element._noSearchParameters(), false);
       });
 
-      test('_equals compares correctly', function() {
-        assert.equal(element._equals({}, []), false);
-        assert.equal(element._equals('abc', ['abc']), false);
-        assert.equal(element._equals('abc', 'abc'), true);
+      test('_toggleAllFacetLists flips collapseFacetLists', function() {
+        element._toggleAllFacetLists();
+        assert.equal(element.collapseFacetLists, true);
       });
 
       test('header panel should exist', function() {
@@ -263,6 +284,41 @@ limitations under the License.
           expect(facetList[0]).to.exist;
           expect(facetList[1]).to.exist;
           assert.equal(facetList.length, 2);
+          done();
+        });
+      });
+
+      test('does have breadbox-item if networkExpansionParameters and searchFields are defined', function(done) {
+        element.networkExpansionParameters = {
+          a: true,
+          b: true,
+          c: false,
+          d: false
+        };
+        element.searchFields = [{
+          key: 'a',
+          title: 'Field A'
+        }, {
+          key: 'b',
+          title: 'Field B'
+        }, {
+          key: 'c',
+          title: 'Field C'
+        }, {
+          key: 'd',
+          title: 'Field D'
+        }];
+        element.searchParameters = {};
+
+        flush(function() {
+          var items = Polymer.dom(element.root).querySelectorAll('breadbox-item');
+          expect(items.length).to.equal(2);
+          expect(items[0].getAttribute('icon')).to.equal('fa:arrows-alt');
+          expect(items[0].getAttribute('icon-text')).to.equal('Network Expansion Active');
+          expect(items[0].text).to.equal('Field A');
+          expect(items[1].getAttribute('icon')).to.equal('fa:arrows-alt');
+          expect(items[1].getAttribute('icon-text')).to.equal('Network Expansion Active');
+          expect(items[1].text).to.equal('Field B');
           done();
         });
       });

@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../breadbox-item/breadbox-item.html">
 <link rel="import" href="../date-range-facet/date-range-facet.html">
 <link rel="import" href="../facet-list/facet-list.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
@@ -58,6 +60,7 @@ Custom property                                 | Description                   
 `--facet-panel-second-bar-title-color`          | The color of the right (second) title labels.                       | --paper-grey-900
 `--facet-panel-second-bar-title-hover-color`    | The color of the right (second) title labels on hover (if a link).  | --paper-grey-700
 `--facet-panel-selected-facet-background-color` | The background color of the selected facets.                        | --paper-grey-400
+`--facet-panel-selected-facet-icon-color`       | The icon color of the selected faces.                               | --paper-grey-900
 `--facet-panel-selected-facet-icon-hover-color` | The icon hover color of the selected facets.                        | white
 `--facet-panel-selected-facet-text-color`       | The text color of the selected facets.                              | --paper-grey-900
 
@@ -122,14 +125,9 @@ Custom property                                 | Description                   
 
       selected-facets-display {
         --selected-facet-bg-color: var(--facet-panel-selected-facet-background-color, var(--paper-grey-400));
+        --selected-facet-icon-color: var(--facet-panel-selected-facet-icon-color, var(--paper-grey-900));
         --selected-facet-icon-hover-color: var(--facet-panel-selected-facet-icon-hover-color, white);
         --selected-facet-text-color: var(--facet-panel-selected-facet-text-color, var(--paper-grey-900));
-      }
-
-      selected-facets-display {
-        --selected-facet-item-style-mixin: {
-          border-radius: 3px;
-        };
       }
     </style>
 
@@ -146,6 +144,9 @@ Custom property                                 | Description                   
             </template>
 
             <div class="layout horizontal wrap">
+              <template is="dom-repeat" items="[[_getNetworkExpansionFields(networkExpansionParameters, searchFields, networkExpansionParameters.*)]]">
+                <breadbox-item icon="fa:arrows-alt" icon-text="Network Expansion Active" text="[[item]]"></breadbox-item>
+              </template>
               <template is="dom-repeat" items="[[searchKeys]]">
                 <selected-facets-display facet-key="[[item]]" facets="{{searchParameters}}"></selected-facets-display>
               </template>
@@ -381,15 +382,29 @@ Custom property                                 | Description                   
           };
         },
 
-        _toggleAllFacetLists: function() {
-          var self = this;
-          self.collapseFacetLists = !self.collapseFacetLists;
-          // All facet lists should have the class 'facet'
-          var allFacetListNames = Polymer.dom(this.root).querySelectorAll('.facet');
+        _equals: function(a, b) {
+          return a === b;
+        },
 
-          for (var i = 0, length = allFacetListNames.length; i < length; i++) {
-            allFacetListNames[i].opened = !self.collapseFacetLists;
+        /**
+         * Returns the list of active fields in the given network expansion parameters.
+         *
+         * @param {Object} networkExpansionParameters
+         * @param {Array} searchFields
+         * @return {Array}
+         * @private
+         */
+        _getNetworkExpansionFields: function(networkExpansionParameters, searchFields) {
+          if(!networkExpansionParameters) {
+            return [];
           }
+
+          return searchFields.reduce(function(networkExpansionFields, searchFieldsObject) {
+            if(networkExpansionParameters[searchFieldsObject.key]) {
+              networkExpansionFields.push(searchFieldsObject.title);
+            }
+            return networkExpansionFields;
+          }, []);
         },
 
         _getToggleAllFacetsText: function() {
@@ -404,8 +419,15 @@ Custom property                                 | Description                   
           return this.areSearchParametersDisabled(this.searchParameters);
         },
 
-        _equals: function(a, b) {
-          return a === b;
+        _toggleAllFacetLists: function() {
+          var self = this;
+          self.collapseFacetLists = !self.collapseFacetLists;
+          // All facet lists should have the class 'facet'
+          var allFacetListNames = Polymer.dom(this.root).querySelectorAll('.facet');
+
+          for (var i = 0, length = allFacetListNames.length; i < length; i++) {
+            allFacetListNames[i].opened = !self.collapseFacetLists;
+          }
         }
       });
     })();
