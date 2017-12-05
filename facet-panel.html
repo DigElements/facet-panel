@@ -166,6 +166,11 @@ Custom property                                 | Description                   
               <template is="dom-if" if="[[!_equals(item.type, 'date')]]">
                 <facet-list
                   class="facet"
+                  agg-field="[[item.field]]"
+                  client="[[client]]"
+                  index-name="[[indexName]]"
+                  index-types="[[indexTypes]]"
+                  query-builder-config="[[queryBuilderConfig]]"
                   query-url="[[searchEndpoint]]"
                   date-fields="[[dateFields]]"
                   image-style-class="[[imageStyleClass]]"
@@ -216,13 +221,12 @@ Custom property                                 | Description                   
           /**
            * (Required)
            *
-           * A collection of date fields mapped to objects containing the {String} `start` and {String} `end` property of each date for the
-           * `query-builder` in the child elements of `facet-list`.
+           * The elasticsearch client.  Not required if `searchEndpoint` and `facetsQuery` are set.
            *
            * @type {Object}
            */
-          dateFields: {
-            type: Object
+          client: {
+            type: Object,
           },
 
           /**
@@ -236,6 +240,18 @@ Custom property                                 | Description                   
           collapseFacetLists: {
             type: Boolean,
             value: false
+          },
+
+          /**
+           * (Required)
+           *
+           * A collection of date fields mapped to objects containing the {String} `start` and {String} `end` property of each date for the
+           * `query-builder` in the child elements of `facet-list`.
+           *
+           * @type {Object}
+           */
+          dateFields: {
+            type: Object
           },
 
           /**
@@ -265,6 +281,28 @@ Custom property                                 | Description                   
           /**
            * (Required)
            *
+           * The elasticsearch index to query.  Not required if `searchEndpoint` and `facetsQuery` are set.
+           *
+           * @type {String}
+           */
+          indexName: {
+            type: String
+          },
+
+          /**
+           * (Required)
+           *
+           * The elasticsearch index types to query.  Not required if `searchEndpoint` and `facetsQuery` are set.
+           *
+           * @type {Array}
+           */
+          indexTypes: {
+            type: Array
+          },
+
+          /**
+           * (Required)
+           *
            * The network expansion parameters used by the facets.
            *
            * @type {Object}
@@ -288,7 +326,22 @@ Custom property                                 | Description                   
           /**
            * (Required)
            *
-           * The search endpoint used by querys.
+           * Query config object to pass to the facet-aggregation-query element. Consists of unique keys from
+           * the searchParameter object mapped to config objects containing {String} field and (Optional)
+           * {String} type.  Default type is "string".  Supported types are "string", "date".
+           *
+           * Not required if `searchEndpoint` and `facetsQuery` are set.
+           *
+           * @type {Object}
+           */
+          queryBuilderConfig: {
+            type: Object
+          },
+
+          /**
+           * (Required)
+           *
+           * The search endpoint used by querys.  Not required if `client`, `indexName`, `indexTypes`, and `queryBuilderConfig` are set.
            *
            * @type {Object}
            */
