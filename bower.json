@@ -1,7 +1,7 @@
 {
   "name": "facet-panel",
   "description": "A Polymer Element containing a group of facet-lists and date-range-facets.",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "authors": [
     "Next Century Corporation"
   ],
@@ -28,7 +28,7 @@
     "paper-header-panel": "PolymerElements/paper-header-panel#^2.0.0",
     "paper-styles": "PolymerElements/paper-styles#^2.0.0",
     "paper-toolbar": "PolymerElements/paper-toolbar#^2.0.0",
-    "selected-facets-display": "DigElements/selected-facets-display#2.0.7"
+    "selected-facets-display": "DigElements/selected-facets-display#2.0.8"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^2.0.0",
