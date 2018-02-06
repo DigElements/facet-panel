@@ -188,7 +188,11 @@ Custom property                                 | Description                   
                   process-request="{{processRequest}}">
                 </facet-list>
               </template>
+            </template>
+          </template>
 
+          <template is="dom-repeat" items="[[searchFields]]">
+            <template is="dom-if" if="[[item.facets]]">
               <template is="dom-if" if="[[_equals(item.type, 'date')]]">
                 <date-range-facet
                   class="facet"
