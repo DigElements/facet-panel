@@ -72,27 +72,6 @@ limitations under the License.
         assert.equal(element._getToggleAllFacetsIcon(), 'icons:expand-less');
       });
 
-      test('_getNetworkExpansionFields does return expected list', function() {
-        assert.deepEqual(element._getNetworkExpansionFields({
-          a: true,
-          b: true,
-          c: false,
-          d: false
-        }, [{
-          key: 'a',
-          title: 'Field A'
-        }, {
-          key: 'b',
-          title: 'Field B'
-        }, {
-          key: 'c',
-          title: 'Field C'
-        }, {
-          key: 'd',
-          title: 'Field D'
-        }]), ['Field A', 'Field B']);
-      });
-
       test('_toggleAllFacetLists flips collapseFacetLists', function() {
         element._toggleAllFacetLists();
         assert.equal(element.collapseFacetLists, true);
@@ -225,6 +204,22 @@ limitations under the License.
           var dateFacet = Polymer.dom(element.root).querySelectorAll('date-range-facet');
           expect(dateFacet[0]).to.exist;
           done();
+        });
+      });
+
+      test('_createResultConfig does return expected object', function() {
+        expect(element._createResultConfig('testName')).to.deep.equal({
+          name: 'testName',
+          isNetworkExpansion: false
+        });
+
+        element.networkExpansionParameters = {
+          testName: true
+        };
+
+        expect(element._createResultConfig('testName')).to.deep.equal({
+          name: 'testName',
+          isNetworkExpansion: true
         });
       });
     });

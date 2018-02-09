@@ -350,27 +350,6 @@ Custom property                                 | Description                   
           return a === b;
         },
 
-        /**
-         * Returns the list of active fields in the given network expansion parameters.
-         *
-         * @param {Object} networkExpansionParameters
-         * @param {Array} searchFields
-         * @return {Array}
-         * @private
-         */
-        _getNetworkExpansionFields: function(networkExpansionParameters, searchFields) {
-          if(!networkExpansionParameters) {
-            return [];
-          }
-
-          return searchFields.reduce(function(networkExpansionFields, searchFieldsObject) {
-            if(networkExpansionParameters[searchFieldsObject.key]) {
-              networkExpansionFields.push(searchFieldsObject.title);
-            }
-            return networkExpansionFields;
-          }, []);
-        },
-
         _getToggleAllFacetsText: function() {
           return (this.collapseFacetLists ? 'Expand' : 'Collapse') + ' All';
         },
