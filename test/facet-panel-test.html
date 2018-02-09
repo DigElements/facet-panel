@@ -45,6 +45,11 @@ limitations under the License.
         flush(done);
       });
 
+      test('does have expected properties', function() {
+        assert.isFalse(element.collapseFacetLists);
+        assert.equal(element.imageStyleClass, '');
+      });
+
       test('_equals compares correctly', function() {
         assert.equal(element._equals({}, []), false);
         assert.equal(element._equals('abc', ['abc']), false);
@@ -86,23 +91,6 @@ limitations under the License.
           key: 'd',
           title: 'Field D'
         }]), ['Field A', 'Field B']);
-      });
-
-      test('_noSearchParameters compares correctly', function() {
-        assert.equal(element._noSearchParameters(), true);
-
-        element.searchParameters = {
-          postingDate: {
-            dateEnd: {
-              enabled: true
-            },
-            dateStart: {
-              enabled: true
-            }
-          }
-        }
-
-        assert.equal(element._noSearchParameters(), false);
       });
 
       test('_toggleAllFacetLists flips collapseFacetLists', function() {
@@ -155,22 +143,6 @@ limitations under the License.
 
         var pages = element.$$('iron-pages');
         expect(pages).to.not.exist;
-      });
-
-      test('facets display should not exist if searchKeys is not defined', function() {
-        element.searchParameters = {
-          postingDate: {
-            dateEnd: {
-              enabled: true
-            },
-            dateStart: {
-              enabled: true
-            }
-          }
-        }
-
-        var facetsDisplay = element.$$('selected-facets-display');
-        expect(facetsDisplay).to.not.exist;
       });
 
       test('facets list and date range facet should not exist if searchFields is not defined', function() {
@@ -252,73 +224,6 @@ limitations under the License.
         flush(function() {
           var dateFacet = Polymer.dom(element.root).querySelectorAll('date-range-facet');
           expect(dateFacet[0]).to.exist;
-          done();
-        });
-      });
-
-      test('selected facets list should not exist if searchKeys is not defined', function() {
-        var facetList = Polymer.dom(element.root).querySelectorAll('selected-facets-display');
-        expect(facetList[0]).to.not.exist;
-      });
-
-      test('selected facets list should exist if searchKeys is defined', function(done) {
-        element.searchParameters = {
-          postingDate: {
-            dateEnd: {
-              enabled: true
-            },
-            dateStart: {
-              enabled: true
-            }
-          },
-          city: {
-            key: 'city',
-            value: 'city name'
-          }
-        }
-
-        element.searchKeys = ['date_posted', 'city'];
-
-        flush(function() {
-          var facetList = Polymer.dom(element.root).querySelectorAll('selected-facets-display');
-          expect(facetList[0]).to.exist;
-          expect(facetList[1]).to.exist;
-          assert.equal(facetList.length, 2);
-          done();
-        });
-      });
-
-      test('does have breadbox-item if networkExpansionParameters and searchFields are defined', function(done) {
-        element.networkExpansionParameters = {
-          a: true,
-          b: true,
-          c: false,
-          d: false
-        };
-        element.searchFields = [{
-          key: 'a',
-          title: 'Field A'
-        }, {
-          key: 'b',
-          title: 'Field B'
-        }, {
-          key: 'c',
-          title: 'Field C'
-        }, {
-          key: 'd',
-          title: 'Field D'
-        }];
-        element.searchParameters = {};
-
-        flush(function() {
-          var items = Polymer.dom(element.root).querySelectorAll('breadbox-item');
-          expect(items.length).to.equal(2);
-          expect(items[0].getAttribute('icon')).to.equal('fa:arrows-alt');
-          expect(items[0].getAttribute('icon-text')).to.equal('Network Expansion Active');
-          expect(items[0].text).to.equal('Field A');
-          expect(items[1].getAttribute('icon')).to.equal('fa:arrows-alt');
-          expect(items[1].getAttribute('icon-text')).to.equal('Network Expansion Active');
-          expect(items[1].text).to.equal('Field B');
           done();
         });
       });
