@@ -67,7 +67,7 @@ Custom property                                 | Description                   
     <style include="iron-flex iron-flex-alignment"></style>
 
     <style>
-      paper-header-panel > * {
+      .inside > * {
         margin: 10px;
       }
 
@@ -98,60 +98,60 @@ Custom property                                 | Description                   
 
     <paper-header-panel>
       <template is="dom-if" if="[[searchParameters]]">
-        <div class="layout horizontal facet expand-collapse-all" title="Toggle All Facets" on-tap="_toggleAllFacetLists">
-          <span class="flex">Facets</span>
-          <span>[[_getToggleAllFacetsText(collapseFacetLists)]]</span>
-          <iron-icon icon="[[_getToggleAllFacetsIcon(collapseFacetLists)]]"></iron-icon>
+        <div class="inside">
+          <div class="layout horizontal expand-collapse-all" title="Toggle All Facets" on-tap="_toggleAllFacetLists">
+            <span class="flex">Facets</span>
+            <span>[[_getToggleAllFacetsText(collapseFacetLists)]]</span>
+            <iron-icon icon="[[_getToggleAllFacetsIcon(collapseFacetLists)]]"></iron-icon>
+          </div>
+
+          <template is="dom-repeat" items="[[searchFields]]">
+            <template is="dom-if" if="[[item.facets]]">
+              <template is="dom-if" if="[[!_equals(item.type, 'date')]]">
+                <facet-list
+                  agg-field="[[item.field]]"
+                  client="[[client]]"
+                  index-name="[[indexName]]"
+                  index-types="[[indexTypes]]"
+                  query-builder-config="[[queryBuilderConfig]]"
+                  query-url="[[searchEndpoint]]"
+                  date-fields="[[dateFields]]"
+                  image-style-class="[[imageStyleClass]]"
+                  name="[[item.key]]"
+                  title="[[item.title]]"
+                  target="_blank"
+                  result-config="[[_createResultConfig(item.key, networkExpansionParameters.*)]]"
+                  result-function="[[item.facetTransform]]"
+                  result-list="{{item.results}}"
+                  search-config="[[networkExpansionParameters]]"
+                  search-function="[[facetsQuery]]"
+                  search-parameters-property="[[item.key]]"
+                  text-function="[[textFunction]]"
+                  search-parameters="{{searchParameters}}"
+                  process-request="{{processRequest}}">
+                </facet-list>
+              </template>
+            </template>
+          </template>
+
+          <template is="dom-repeat" items="[[searchFields]]">
+            <template is="dom-if" if="[[item.facets]]">
+              <template is="dom-if" if="[[_equals(item.type, 'date')]]">
+                <date-range-facet
+                  header-title="[[item.title]]"
+                  date-start-key="[[item.dateProperties.start.key]]"
+                  date-start-title="[[item.dateProperties.start.title]]"
+                  date-end-key="[[item.dateProperties.end.key]]"
+                  date-end-title="[[item.dateProperties.end.title]]"
+                  search-parameters-property="[[item.key]]"
+                  search-parameters="{{searchParameters}}">
+                </date-range-facet>
+              </template>
+            </template>
+          </template>
+
+          <slot></slot>
         </div>
-
-        <template is="dom-repeat" items="[[searchFields]]">
-          <template is="dom-if" if="[[item.facets]]">
-            <template is="dom-if" if="[[!_equals(item.type, 'date')]]">
-              <facet-list
-                class="facet"
-                agg-field="[[item.field]]"
-                client="[[client]]"
-                index-name="[[indexName]]"
-                index-types="[[indexTypes]]"
-                query-builder-config="[[queryBuilderConfig]]"
-                query-url="[[searchEndpoint]]"
-                date-fields="[[dateFields]]"
-                image-style-class="[[imageStyleClass]]"
-                name="[[item.key]]"
-                title="[[item.title]]"
-                target="_blank"
-                result-config="[[_createResultConfig(item.key, networkExpansionParameters.*)]]"
-                result-function="[[item.facetTransform]]"
-                result-list="{{item.results}}"
-                search-config="[[networkExpansionParameters]]"
-                search-function="[[facetsQuery]]"
-                search-parameters-property="[[item.key]]"
-                text-function="[[textFunction]]"
-                search-parameters="{{searchParameters}}"
-                process-request="{{processRequest}}">
-              </facet-list>
-            </template>
-          </template>
-        </template>
-
-        <template is="dom-repeat" items="[[searchFields]]">
-          <template is="dom-if" if="[[item.facets]]">
-            <template is="dom-if" if="[[_equals(item.type, 'date')]]">
-              <date-range-facet
-                class="facet"
-                header-title="[[item.title]]"
-                date-start-key="[[item.dateProperties.start.key]]"
-                date-start-title="[[item.dateProperties.start.title]]"
-                date-end-key="[[item.dateProperties.end.key]]"
-                date-end-title="[[item.dateProperties.end.title]]"
-                search-parameters-property="[[item.key]]"
-                search-parameters="{{searchParameters}}">
-              </date-range-facet>
-            </template>
-          </template>
-        </template>
-
-        <slot></slot>
       </template>
     </paper-header-panel>
   </template>
