@@ -43,21 +43,17 @@ A Polymer Element containing a group of facet-lists and date-range-facets.
 
 Custom property                                 | Description                                                         | Default
 ------------------------------------------------|---------------------------------------------------------------------|--------
-`--facet-panel-bar-color`                       | The color of the single or left bars.                               | --paper-grey-400
+`--facet-panel-bar-color`                       | The color of the single or left bars.                               | --paper-grey-300
 `--facet-panel-bar-count-color`                 | The color of the single or left count labels.                       | --paper-grey-900
 `--facet-panel-bar-height`                      | The height of the single or left bars.                              | 20px
 `--facet-panel-bar-title-color`                 | The color of the single or left title labels.                       | --paper-grey-900
-`--facet-panel-bar-title-hover-color`           | The color of the single or left title labels on hover (if a link).  | --paper-grey-700
+`--facet-panel-bar-title-hover-color`           | The color of the single or left title labels on hover (if a link).  | --paper-indigo-900
 `--facet-panel-max-height`                      | The max height of the bar chart.                                    | none
-`--facet-panel-second-bar-color`                | The color of the right (second) bars.                               | --paper-grey-400
+`--facet-panel-second-bar-color`                | The color of the right (second) bars.                               | --paper-grey-300
 `--facet-panel-second-bar-count-color`          | The color of the right (second) count labels.                       | --paper-grey-900
 `--facet-panel-second-bar-height`               | The height of the right (second) bars.                              | 20px
 `--facet-panel-second-bar-title-color`          | The color of the right (second) title labels.                       | --paper-grey-900
-`--facet-panel-second-bar-title-hover-color`    | The color of the right (second) title labels on hover (if a link).  | --paper-grey-700
-`--facet-panel-selected-facet-background-color` | The background color of the selected facets.                        | --paper-grey-400
-`--facet-panel-selected-facet-icon-color`       | The icon color of the selected faces.                               | --paper-grey-900
-`--facet-panel-selected-facet-icon-hover-color` | The icon hover color of the selected facets.                        | white
-`--facet-panel-selected-facet-text-color`       | The text color of the selected facets.                              | --paper-grey-900
+`--facet-panel-second-bar-title-hover-color`    | The color of the right (second) title labels on hover (if a link).  | --paper-indigo-900
 
 @demo demo/index.html
 -->
@@ -72,6 +68,7 @@ Custom property                                 | Description                   
       }
 
       .expand-collapse-all {
+        color: var(--paper-grey-900);
         cursor: pointer;
         font-weight: 500;
         line-height: 24px;
@@ -82,21 +79,21 @@ Custom property                                 | Description                   
       }
 
       facet-list {
-        --facet-list-bar-color: var(--facet-panel-bar-color, var(--paper-grey-400));
+        --facet-list-bar-color: var(--facet-panel-bar-color, var(--paper-grey-300));
         --facet-list-bar-count-color: var(--facet-panel-bar-count-color, var(--paper-grey-900));
         --facet-list-bar-height: var(--facet-panel-bar-height, 20px);
         --facet-list-bar-title-color: var(--facet-panel-bar-title-color, var(--paper-grey-900));
-        --facet-list-bar-title-hover-color: var(--facet-panel-bar-title-hover-color, var(--paper-grey-700));
+        --facet-list-bar-title-hover-color: var(--facet-panel-bar-title-hover-color, var(--paper-indigo-900));
         --facet-list-max-height: var(--facet-panel-max-height, none);
-        --facet-list-second-bar-color: var(--facet-panel-second-bar-color, var(--paper-grey-400));
+        --facet-list-second-bar-color: var(--facet-panel-second-bar-color, var(--paper-grey-300));
         --facet-list-second-bar-count-color: var(--facet-panel-second-bar-count-color, var(--paper-grey-900));
         --facet-list-second-bar-height: var(--facet-panel-second-bar-height, 20px);
         --facet-list-second-bar-title-color: var(--facet-panel-second-bar-title-color, var(--paper-grey-900));
-        --facet-list-second-bar-title-hover-color: var(--facet-panel-second-bar-title-hover-color, var(--paper-grey-700));
+        --facet-list-second-bar-title-hover-color: var(--facet-panel-second-bar-title-hover-color, var(--paper-indigo-900));
       }
     </style>
 
-    <paper-header-panel>
+    <paper-header-panel mode="seamed">
       <template is="dom-if" if="[[searchParameters]]">
         <div class="inside">
           <div class="layout horizontal expand-collapse-all" title="Toggle All Facets" on-tap="_toggleAllFacetLists">
@@ -117,8 +114,10 @@ Custom property                                 | Description                   
                   query-url="[[searchEndpoint]]"
                   date-fields="[[dateFields]]"
                   image-style-class="[[imageStyleClass]]"
+                  icon="[[item.icon]]"
                   name="[[item.key]]"
-                  title="[[item.title]]"
+                  pretty-name="[[item.titlePlural]]"
+                  style-class="[[item.styleClass]]"
                   target="_blank"
                   result-config="[[_createResultConfig(item.key, networkExpansionParameters.*)]]"
                   result-function="[[item.facetTransform]]"
@@ -362,10 +361,14 @@ Custom property                                 | Description                   
           var self = this;
           self.collapseFacetLists = !self.collapseFacetLists;
           // All facet lists should have the class 'facet'
-          var allFacetListNames = Polymer.dom(this.root).querySelectorAll('.facet');
+          var allFacetListNames = Polymer.dom(this.root).querySelectorAll('facet-list');
 
           for (var i = 0, length = allFacetListNames.length; i < length; i++) {
-            allFacetListNames[i].opened = !self.collapseFacetLists;
+            if(self.collapseFacetLists) {
+              allFacetListNames[i].hideList();
+            } else {
+              allFacetListNames[i].showList();
+            }
           }
         }
       });
