@@ -18,10 +18,10 @@ limitations under the License.
 <link rel="import" href="../date-range-facet/date-range-facet.html">
 <link rel="import" href="../facet-list/facet-list.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../lodash-import/lodash.html">
 <link rel="import" href="../paper-header-panel/paper-header-panel.html">
 <link rel="import" href="../paper-styles/color.html">
+<link rel="import" href="../stylized-icon/stylized-icon.html">
 
 <!--
 A Polymer Element containing a group of facet-lists and date-range-facets.
@@ -64,14 +64,18 @@ Custom property                                 | Description                   
 
     <style>
       .inside > * {
-        margin: 10px;
+        margin: 20px 10px 10px;
       }
 
       .expand-collapse-all {
         color: var(--paper-grey-900);
         cursor: pointer;
         font-weight: 500;
-        line-height: 24px;
+        line-height: 20px;
+      }
+
+      .expand-collapse-all:hover stylized-icon {
+        --stylized-icon-color: var(--paper-grey-900);
       }
 
       date-range-facet ::slotted(iron-collapse) {
@@ -99,7 +103,7 @@ Custom property                                 | Description                   
           <div class="layout horizontal expand-collapse-all" title="Toggle All Facets" on-tap="_toggleAllFacetLists">
             <span class="flex">Facets</span>
             <span>[[_getToggleAllFacetsText(collapseFacetLists)]]</span>
-            <iron-icon icon="[[_getToggleAllFacetsIcon(collapseFacetLists)]]"></iron-icon>
+            <stylized-icon icon="[[_getToggleAllFacetsIcon(collapseFacetLists)]]"></stylized-icon>
           </div>
 
           <template is="dom-repeat" items="[[searchFields]]">
